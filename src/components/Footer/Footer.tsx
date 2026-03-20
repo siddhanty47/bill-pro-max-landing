@@ -33,7 +33,7 @@ export default function Footer() {
                 <a href="#">About</a>
               </li>
               <li>
-                <a href="mailto:contact@billpromax.com">Contact</a>
+                <a href="mailto:billpromax.v2@gmail.com">Contact</a>
               </li>
             </ul>
           </div>
