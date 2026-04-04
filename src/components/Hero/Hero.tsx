@@ -46,8 +46,9 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p className={styles.subtitle} {...fadeUp(0.4)}>
-          Automated billing, challan tracking, PDF statements, client portals,
-          and business analytics — all in one terminal-inspired platform.
+          AI-powered challan scanning, automated billing, real-time tracking,
+          client portals, and full audit trails — all in one platform built
+          for scaffolding businesses.
         </motion.p>
 
         <motion.div className={styles.buttons} {...fadeUp(0.6)}>

@@ -6,22 +6,20 @@ import styles from "./Features.module.css";
 
 const FEATURES = [
   {
-    title: "Inventory Management",
+    title: "Scan Photo to Challan",
     description:
-      "Track all scaffolding items with real-time stock levels. Import inventory presets to get started in seconds.",
+      "Snap a photo of any handwritten challan and let AI extract party, items, and quantities instantly. Review, edit, and submit — no manual data entry.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M20 7H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1Z" />
-        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-        <path d="M12 11v4" />
-        <path d="M10 13h4" />
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+        <circle cx="12" cy="13" r="4" />
       </svg>
     ),
   },
   {
     title: "Smart Billing",
     description:
-      "Automated GST calculations (SGST/CGST/IGST), bulk bill generation for all clients in one click, and payment tracking.",
+      "Automated GST calculations (SGST/CGST/IGST), bulk bill generation for all clients in one click, editable bill numbers, and payment tracking.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M12 2v20" />
@@ -32,12 +30,36 @@ const FEATURES = [
   {
     title: "Challan Tracking",
     description:
-      "Delivery and return challans with item-level tracking. Know what's out and what's back.",
+      "Delivery and return challans with item-level tracking, damage recording, and editable challan numbers. Know what's out and what's back.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
         <path d="M14 2v6h6" />
         <path d="M9 15l2 2 4-4" />
+      </svg>
+    ),
+  },
+  {
+    title: "Full Audit Trail",
+    description:
+      "Every change to inventory, challans, bills, and payments is tracked with who changed what and when. Jira-style change history on every record.",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M12 8v4l3 3" />
+        <circle cx="12" cy="12" r="10" />
+      </svg>
+    ),
+  },
+  {
+    title: "Inventory Management",
+    description:
+      "Track scaffolding items with real-time stock levels, cost prices, short rates, and damage tracking. Import presets to get started in seconds.",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M20 7H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1Z" />
+        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+        <path d="M12 11v4" />
+        <path d="M10 13h4" />
       </svg>
     ),
   },
@@ -55,7 +77,7 @@ const FEATURES = [
   {
     title: "PDF & Statements",
     description:
-      "Generate professional PDF invoices, challan documents, and account statements. Download or email directly to clients.",
+      "Generate professional PDF invoices, challan documents, ledgers, and account statements. Download or email directly to clients.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
@@ -66,9 +88,22 @@ const FEATURES = [
     ),
   },
   {
+    title: "Employee Management",
+    description:
+      "Track employees with salary details, emergency contacts, and role assignments. Manage your workforce alongside your rental operations.",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M19 8v6" />
+        <path d="M22 11h-6" />
+      </svg>
+    ),
+  },
+  {
     title: "Business Analytics",
     description:
-      "Dashboard with real-time insights — revenue trends, outstanding amounts, overdue bills, inventory utilization. Monitor how your business is doing at a glance.",
+      "Dashboard with real-time insights — revenue trends, outstanding amounts, overdue bills, and inventory utilization at a glance.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M18 20V10" />
@@ -80,7 +115,7 @@ const FEATURES = [
   {
     title: "Automated Workflows",
     description:
-      "Inventory presets, GST detail auto-fetch to autofill party info, bulk bill generation, automatic monthly billing, and overdue detection — less manual work, fewer errors.",
+      "Inventory presets, GST auto-fetch, bulk billing, automatic monthly billing, overdue detection, and payment reminders — less manual work, fewer errors.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M12 2v4" />
@@ -97,7 +132,7 @@ const FEATURES = [
   {
     title: "Party Management",
     description:
-      "Client database with multi-site support, agreement history, and role-based access.",
+      "Client database with multi-site support, agreement history, opening balances, and role-based access.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
@@ -110,7 +145,7 @@ const FEATURES = [
   {
     title: "Team Collaboration",
     description:
-      "Invite team members with role-based permissions (owner, manager, staff, accountant, viewer). Real-time notifications.",
+      "Invite team members with role-based permissions (owner, manager, staff, accountant, viewer). Real-time notifications keep everyone in sync.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
