@@ -103,9 +103,14 @@ export default function Inside() {
       track.style.transform = "";
       return;
     }
+    // Step = distance between panel starts, so each active panel lands on the left margin.
     const p = progressOf(section);
-    const max = track.scrollWidth - window.innerWidth + 80;
-    track.style.transform = `translate3d(${-p * Math.max(0, max)}px, 0, 0)`;
+    const panels = track.children;
+    const step =
+      panels.length > 1
+        ? (panels[1] as HTMLElement).offsetLeft - (panels[0] as HTMLElement).offsetLeft
+        : 0;
+    track.style.transform = `translate3d(${-p * (FEATURES.length - 1) * step}px, 0, 0)`;
     const next = Math.round(p * (FEATURES.length - 1));
     setActive((cur) => (cur === next ? cur : next));
   });
