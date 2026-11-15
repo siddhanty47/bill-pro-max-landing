@@ -1,10 +1,31 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { Archivo, Caveat, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+
+const archivo = Archivo({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-body",
+  weight: ["400", "500"],
+  variable: "--font-jetbrains",
+  display: "swap",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["500", "700"],
+  variable: "--font-caveat",
   display: "swap",
 });
 
@@ -12,7 +33,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://billpromax.com"),
   title: "Bill Pro Max — Scaffolding Rental Management Platform",
   description:
-    "AI assistant, instant global search, automated billing, challan tracking, PDF statements, client portals, and business analytics for scaffolding rental businesses. All in one terminal-inspired platform.",
+    "AI assistant, instant global search, automated billing, challan tracking, PDF statements, client portals, and business analytics for scaffolding rental businesses.",
   keywords: [
     "scaffolding rental management",
     "billing software",
@@ -61,7 +82,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={jetbrainsMono.variable}>
+    <html
+      lang="en"
+      className={`${archivo.variable} ${inter.variable} ${jetbrainsMono.variable} ${caveat.variable}`}
+    >
       <head>
         <script
           type="application/ld+json"
