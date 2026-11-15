@@ -25,7 +25,7 @@ const SNAP_RANGE = 0.3; // fraction of viewport height
 const SNAP_DURATION = 0.9;
 const ANCHOR_DURATION = 1.4;
 
-/** Section edges worth settling on: tops of [data-snap] and [data-snap-pin], ends of pinned sections. */
+/** Section edges worth settling on: tops of [data-snap] and [data-snap-pin], ends of pinned sections, page bottom. */
 function snapPoints(): number[] {
   const vh = window.innerHeight;
   const points: number[] = [];
@@ -37,6 +37,8 @@ function snapPoints(): number[] {
       const pinned = el.hasAttribute("data-snap-pin") && el.offsetHeight > vh * 1.1;
       if (pinned) points.push(top + el.offsetHeight - vh);
     });
+  // The very bottom is a resting place too, so a short footer is never pulled back up.
+  points.push(document.documentElement.scrollHeight - vh);
   return points;
 }
 
