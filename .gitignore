@@ -25,5 +25,6 @@ npm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# brainstorm mockups
+# superpowers working files (specs, plans, mockups) — local only
 .superpowers/
+docs/superpowers/

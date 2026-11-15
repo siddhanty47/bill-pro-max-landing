@@ -36,7 +36,6 @@ src/
 
 - Colours match the app (black base, `#00cc88` accent). **No terminal styling**: no monospace body text, `[BRACKET]` buttons, `_` cursors, `//` labels or fake shell windows. Monospace is for numbers, amounts and document numbers only.
 - Avoid generic AI-landing tropes (pill "New" badges, gradient shimmer text, glow blobs, emoji icons, icon-card grids). Visuals come from the trade: blueprint grid, scaffold drawings, paper challans, realistic app screens.
-- Design spec + approved prototype: `docs/superpowers/specs/2026-11-15-landing-revamp-design.md`, `docs/superpowers/specs/assets/landing-revamp-prototype.html`.
 
 ## Motion
 
