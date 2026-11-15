@@ -2,6 +2,8 @@
 
 export const MOBILE_QUERY = "(max-width: 860px)";
 export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+/** Layouts that drop pinned/horizontal scroll: phones and reduced motion. */
+export const STACKED_QUERY = `${MOBILE_QUERY}, ${REDUCED_MOTION_QUERY}`;
 
 export function clamp(v: number, min = 0, max = 1): number {
   return Math.min(max, Math.max(min, v));
