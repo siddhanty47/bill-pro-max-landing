@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://billpromax.com"),
   title: "Bill Pro Max — Scaffolding Rental Management Platform",
   description:
-    "Automated billing, challan tracking, PDF statements, client portals, and business analytics for scaffolding rental businesses. All in one terminal-inspired platform.",
+    "AI assistant, instant global search, automated billing, challan tracking, PDF statements, client portals, and business analytics for scaffolding rental businesses. All in one terminal-inspired platform.",
   keywords: [
     "scaffolding rental management",
     "billing software",
@@ -22,11 +22,13 @@ export const metadata: Metadata = {
     "inventory management",
     "scaffolding business",
     "rental billing platform",
+    "AI assistant for rental business",
+    "AI challan scanning",
   ],
   openGraph: {
     title: "Bill Pro Max — Scaffolding Rental Management Platform",
     description:
-      "Automated billing, challan tracking, PDF statements, client portals, and business analytics for scaffolding rental businesses.",
+      "AI assistant, global search, automated billing, challan tracking, client portals, and business analytics for scaffolding rental businesses.",
     url: "https://billpromax.com",
     siteName: "Bill Pro Max",
     type: "website",
@@ -44,7 +46,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Bill Pro Max — Scaffolding Rental Management Platform",
     description:
-      "Automated billing, challan tracking, PDF statements, and business analytics for scaffolding rental businesses.",
+      "AI assistant, global search, automated billing, challan tracking, and business analytics for scaffolding rental businesses.",
     images: ["/og-image.png"],
   },
   robots: {

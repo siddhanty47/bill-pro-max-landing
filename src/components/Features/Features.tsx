@@ -6,13 +6,24 @@ import styles from "./Features.module.css";
 
 const FEATURES = [
   {
-    title: "Scan Photo to Challan",
+    title: "AI Assistant",
     description:
-      "Snap a photo of any handwritten challan and let AI extract party, items, and quantities instantly. Review, edit, and submit — no manual data entry.",
+      "Ask in plain words, by voice, or with a photo of a handwritten challan. Check ledgers, outstanding balances, overdue bills and stock — or have it create challans, add parties and record payments. Every action waits for your confirmation and respects your role.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-        <circle cx="12" cy="13" r="4" />
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        <path d="M12 7l1 2.5L15.5 10 13 11l-1 2.5L11 11l-2.5-1L11 9.5z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Global Search (⌘K)",
+    description:
+      "Press ⌘K / Ctrl+K and jump to any party, site, agreement, item, bill or challan in a few keystrokes. Results only show what your role can see.",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <circle cx="11" cy="11" r="7" />
+        <path d="M21 21l-4.35-4.35" />
       </svg>
     ),
   },
@@ -88,19 +99,6 @@ const FEATURES = [
     ),
   },
   {
-    title: "Employee Management",
-    description:
-      "Track employees with salary details, emergency contacts, and role assignments. Manage your workforce alongside your rental operations.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M19 8v6" />
-        <path d="M22 11h-6" />
-      </svg>
-    ),
-  },
-  {
     title: "Business Analytics",
     description:
       "Dashboard with real-time insights — revenue trends, outstanding amounts, overdue bills, and inventory utilization at a glance.",
@@ -143,9 +141,9 @@ const FEATURES = [
     ),
   },
   {
-    title: "Team Collaboration",
+    title: "Team & Employees",
     description:
-      "Invite team members with role-based permissions (owner, manager, staff, accountant, viewer). Real-time notifications keep everyone in sync.",
+      "Invite teammates with role-based permissions (owner, manager, staff, accountant, viewer) and manage employees with salary details and emergency contacts. Real-time notifications keep everyone in sync.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
