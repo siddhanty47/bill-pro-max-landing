@@ -4,34 +4,49 @@ Static marketing/landing page. **Fully independent** — no API calls, no auth, 
 
 ## Tech
 
-- Next.js 15 with App Router
-- TypeScript
-- Motion (Framer Motion) for animations
-- Static export (`next build` produces `out/`)
+- Next.js 15 with App Router, static export (`next build` produces `out/`)
+- TypeScript, CSS modules
+- [Lenis](https://github.com/darkroomengineering/lenis) for smooth scrolling; no other animation library (CSS keyframes + small rAF helpers)
+- Fonts via `next/font/google`: Archivo (display), Inter (text), JetBrains Mono (numbers only), Caveat (handwritten challan illustration)
 
 ## Structure
 
 ```
 src/
 ├── app/
-│   ├── layout.tsx          # Root layout (fonts, metadata)
-│   ├── page.tsx            # Home page — composes section components
-│   └── globals.css         # Global styles
+│   ├── layout.tsx            # Fonts, metadata, JSON-LD
+│   ├── page.tsx              # Composes sections inside <ScrollProvider>
+│   └── globals.css           # Tokens + global utilities (.gridBg, .eyebrow, .display, .btn, .textLink)
+├── lib/
+│   ├── motion.ts             # clamp/seg/easeOut, progressOf(), countUp(), media queries
+│   └── site.ts               # APP_URL, SIGNUP_URL, CONTACT_EMAIL
 └── components/
-    ├── Navbar/Navbar.tsx
-    ├── Hero/Hero.tsx, TypingAnimation.tsx
-    ├── Features/Features.tsx, FeatureCard.tsx
-    ├── TerminalDemo/TerminalDemo.tsx
-    ├── CTA/CTA.tsx
-    ├── Footer/Footer.tsx
-    ├── Container.tsx        # Shared max-width wrapper
-    ├── ScrollReveal.tsx     # Scroll-triggered animation wrapper
-    └── GridBackground.tsx   # Decorative background
+    ├── scroll/ScrollProvider.tsx   # Lenis, shared scroll loop (useScrollUpdate), snap-on-idle, anchor glide
+    ├── Navbar/                     # Fixed nav, frosted on scroll, progress line
+    ├── Hero/                       # Headline + self-drawing ScaffoldDrawing.tsx
+    ├── Story/                      # Pinned, scroll-scrubbed: paper challan → digital challan → bill
+    ├── Inside/                     # Pinned horizontal track of 5 feature panels (panels/*.tsx)
+    ├── AlsoIncluded/               # Crawlable list of smaller features (keeps SEO text coverage)
+    ├── Close/                      # Final CTA, tower builds on scroll
+    ├── Footer/
+    └── shared/BrandMark.tsx        # Scaffold logo mark
 ```
+
+## Design Rules
+
+- Colours match the app (black base, `#00cc88` accent). **No terminal styling**: no monospace body text, `[BRACKET]` buttons, `_` cursors, `//` labels or fake shell windows. Monospace is for numbers, amounts and document numbers only.
+- Avoid generic AI-landing tropes (pill "New" badges, gradient shimmer text, glow blobs, emoji icons, icon-card grids). Visuals come from the trade: blueprint grid, scaffold drawings, paper challans, realistic app screens.
+- Design spec + approved prototype: `docs/superpowers/specs/2026-11-15-landing-revamp-design.md`, `docs/superpowers/specs/assets/landing-revamp-prototype.html`.
+
+## Motion
+
+- Per-frame work goes through `useScrollUpdate(cb)` and mutates DOM via refs. Never set React state every frame.
+- Pinned sections use `data-snap-pin` (snaps to start and end); plain sections use `data-snap`. Snap only runs on desktop with Lenis.
+- `STACKED_QUERY` (≤860px or `prefers-reduced-motion`) turns the horizontal track into a vertical stack; reduced motion also shows the Story's finished state and disables Lenis/snap.
 
 ## Styling
 
-No inline styles. Use CSS classes in `globals.css` or component-level CSS files.
+No inline `style={}` in JSX. Use CSS modules or `globals.css`. Data-driven values (bar widths, stagger delays, scroll transforms) are set from effects via refs.
 
 ## Regression Risks
 

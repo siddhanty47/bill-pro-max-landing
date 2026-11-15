@@ -1,128 +1,65 @@
 "use client";
 
-import { motion } from "motion/react";
-import GridBackground from "../shared/GridBackground";
-import TypingAnimation from "./TypingAnimation";
+import { useRef } from "react";
+import { useScrollUpdate } from "../scroll/ScrollProvider";
+import { clamp, prefersReducedMotion } from "@/lib/motion";
+import { SIGNUP_URL } from "@/lib/site";
+import ScaffoldDrawing from "./ScaffoldDrawing";
 import styles from "./Hero.module.css";
 
-const APP_URL = "https://app.billpromax.com";
-
-const TERMINAL_LINES = [
-  { text: "> bill-pro-max --status", type: "command" as const },
-  { text: "", type: "label" as const },
-  { text: "BUSINESS: Sharma Scaffolding Pvt. Ltd.", type: "label" as const },
-  { text: "ACTIVE AGREEMENTS: 47", type: "value" as const },
-  { text: "PENDING CHALLANS: 12", type: "value" as const },
-  { text: "THIS MONTH REVENUE: ₹4,82,000", type: "value" as const },
-  { text: "", type: "label" as const },
-  { text: "STATUS: [ACTIVE]  HEALTH: [GOOD]", type: "status" as const },
-];
-
-function fadeUp(delay: number) {
-  return {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5, delay, ease: "easeOut" as const },
-  };
-}
-
 export default function Hero() {
+  const artRef = useRef<HTMLDivElement>(null);
+
+  // Drawing drifts down and fades as the page scrolls away.
+  useScrollUpdate(() => {
+    const art = artRef.current;
+    if (!art || prefersReducedMotion()) return;
+    const y = window.scrollY;
+    art.style.transform = `translate3d(0, ${y * 0.25}px, 0) scale(${1 + y * 0.0003})`;
+    art.style.opacity = String(1 - clamp(y / (window.innerHeight * 0.9)));
+  });
+
   return (
-    <section className={styles.hero}>
-      <GridBackground />
-      <div className={styles.aura} aria-hidden="true" />
-
-      <div className={styles.content}>
-        <motion.div {...fadeUp(0)}>
-          <span className={styles.badge}>[NOW IN BETA]</span>
-        </motion.div>
-
-        <motion.h1 className={styles.headline} {...fadeUp(0.2)}>
-          Scaffolding Rental Management.
-          <br />
-          <span className={styles.headlineAccent}>
-            <TypingAnimation text="Simplified." delay={800} />
-          </span>
-        </motion.h1>
-
-        <motion.p className={styles.subtitle} {...fadeUp(0.4)}>
-          AI-powered challan scanning, automated billing, real-time tracking,
-          client portals, and full audit trails — all in one platform built
-          for scaffolding businesses.
-        </motion.p>
-
-        <motion.div className={styles.buttons} {...fadeUp(0.6)}>
-          <a
-            href={APP_URL + "/signup"}
-            className={styles.btnPrimary}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            [GET STARTED FREE]
-          </a>
-          <a
-            href={APP_URL + "/demo"}
-            className={styles.btnSecondary}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            [VIEW DEMO]
-          </a>
-        </motion.div>
-
-        <motion.div
-          className={styles.terminal}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
-        >
-          <div className={styles.terminalBar}>
-            <span className={`${styles.terminalDot} ${styles.dotRed}`} />
-            <span className={`${styles.terminalDot} ${styles.dotYellow}`} />
-            <span className={`${styles.terminalDot} ${styles.dotGreen}`} />
-            <span className={styles.terminalTitle}>
-              bash — bill-pro-max
-            </span>
+    <section id="top" className={`${styles.hero} gridBg`} data-snap>
+      <div className={styles.inner}>
+        <div className={styles.top}>
+          <div>
+            <p className={`eyebrow ${styles.kicker}`}>For scaffolding rental businesses</p>
+            <h1 className={styles.headline}>
+              <span className={styles.w}>Every</span> <span className={styles.w}>pipe,</span>{" "}
+              <span className={styles.w}>coupler</span>
+              <br />
+              <span className={styles.w}>and</span> <span className={styles.w}>plank.</span>
+              <br />
+              <span className={`${styles.w} ${styles.thin}`}>Accounted</span>{" "}
+              <span className={`${styles.w} ${styles.thin}`}>for.</span>
+            </h1>
           </div>
-          <TerminalBody />
-        </motion.div>
+          <div>
+            <p className={styles.lede}>
+              What goes out on a challan comes back on a bill. <strong>Bill Pro Max</strong>{" "}
+              tracks every item at every site, works out the rent and GST, and tells you who
+              owes what, so the month-end isn&apos;t a week of retyping.
+            </p>
+            <div className={styles.actions}>
+              <a className="btn" href={SIGNUP_URL} target="_blank" rel="noopener noreferrer">
+                Start free
+              </a>
+              <a className="textLink" href="#how-it-works">
+                Watch a challan become a bill ↓
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div ref={artRef} className={styles.art}>
+          <ScaffoldDrawing />
+        </div>
+      </div>
+      <div className={styles.hint} aria-hidden="true">
+        scroll
+        <i />
       </div>
     </section>
-  );
-}
-
-function TerminalBody() {
-  return (
-    <div className={styles.terminalBody}>
-      {TERMINAL_LINES.map((line, i) => (
-        <TerminalLine key={i} line={line} index={i} />
-      ))}
-    </div>
-  );
-}
-
-function TerminalLine({
-  line,
-  index,
-}: {
-  line: (typeof TERMINAL_LINES)[number];
-  index: number;
-}) {
-  const styleMap = {
-    command: styles.terminalCommand,
-    label: styles.terminalLabel,
-    value: styles.terminalValue,
-    status: styles.terminalStatus,
-  };
-
-  return (
-    <motion.div
-      className={styles.terminalLine}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.2 + index * 0.2, duration: 0.3 }}
-    >
-      <span className={styleMap[line.type]}>{line.text}</span>
-    </motion.div>
   );
 }

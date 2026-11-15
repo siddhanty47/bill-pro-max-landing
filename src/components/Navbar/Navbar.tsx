@@ -1,103 +1,51 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "motion/react";
+import { useRef } from "react";
+import { useScrollUpdate } from "../scroll/ScrollProvider";
+import BrandMark from "../shared/BrandMark";
+import { SIGNUP_URL } from "@/lib/site";
 import styles from "./Navbar.module.css";
 
-const APP_URL = "https://app.billpromax.com";
-
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 100);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+  useScrollUpdate(() => {
+    const y = window.scrollY;
+    navRef.current?.classList.toggle(styles.scrolled, y > 40);
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (barRef.current) {
+      barRef.current.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
     }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
+  });
 
   return (
-    <motion.nav
-      className={`${styles.navbar} ${scrolled ? styles.navbarScrolled : ""}`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-    >
-      <div className={styles.inner}>
-        <a href="#" className={styles.brand}>
-          _BILL PRO MAX<span className={styles.cursor} />
+    <>
+      <div ref={barRef} className={styles.progress} aria-hidden="true" />
+      <nav ref={navRef} className={styles.nav} aria-label="Main">
+        <a href="#top" className={styles.brand}>
+          <span className={styles.mark}>
+            <BrandMark />
+          </span>
+          Bill Pro Max
         </a>
-
         <div className={styles.links}>
-          <a href="#features" className={styles.navLink}>
-            Features
+          <a href="#how-it-works" className={styles.link}>
+            How it works
           </a>
-          <a href="#how-it-works" className={styles.navLink}>
-            How It Works
+          <a href="#features" className={styles.link}>
+            What&apos;s inside
           </a>
           <a
-            href={APP_URL + "/signup"}
-            className={styles.signupBtn}
+            href={SIGNUP_URL}
+            className={styles.cta}
             target="_blank"
             rel="noopener noreferrer"
           >
-            [SIGN UP]
+            Start free
           </a>
         </div>
-
-        <button
-          className={styles.hamburger}
-          onClick={() => setMobileOpen(true)}
-          aria-label="Open menu"
-        >
-          &#9776;
-        </button>
-      </div>
-
-      {mobileOpen && (
-        <div className={styles.mobileOverlay}>
-          <button
-            className={styles.closeBtn}
-            onClick={() => setMobileOpen(false)}
-            aria-label="Close menu"
-          >
-            &#10005;
-          </button>
-          <a
-            href="#features"
-            className={styles.mobileLink}
-            onClick={() => setMobileOpen(false)}
-          >
-            Features
-          </a>
-          <a
-            href="#how-it-works"
-            className={styles.mobileLink}
-            onClick={() => setMobileOpen(false)}
-          >
-            How It Works
-          </a>
-          <a
-            href={APP_URL + "/signup"}
-            className={styles.mobileSignup}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            [SIGN UP]
-          </a>
-        </div>
-      )}
-    </motion.nav>
+      </nav>
+    </>
   );
 }
