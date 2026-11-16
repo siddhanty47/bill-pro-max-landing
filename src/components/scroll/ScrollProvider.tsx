@@ -25,6 +25,15 @@ const SNAP_RANGE = 0.3; // fraction of viewport height
 const SNAP_DURATION = 0.9;
 const ANCHOR_DURATION = 1.4;
 
+/* Wheel feel. Lower lerp = softer glide; the caps stop a hard flick from
+   racing to the bottom of the page. */
+const WHEEL_LERP = 0.07;
+const WHEEL_MULTIPLIER = 0.8;
+const MAX_DELTA_PER_EVENT = 100; // px
+const MAX_AHEAD = 0.8; // how far (in viewports) the target may lead the page
+
+const expoOut = (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+
 /** Section edges worth settling on: tops of [data-snap] and [data-snap-pin], ends of pinned sections, page bottom. */
 function snapPoints(): number[] {
   const vh = window.innerHeight;
@@ -59,11 +68,28 @@ export default function ScrollProvider({ children }: { children: React.ReactNode
     let lenis: Lenis | null = null;
     let raf = 0;
     if (!reduced) {
-      lenis = new Lenis({
-        duration: 1.15,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      const instance = new Lenis({
+        lerp: WHEEL_LERP,
+        wheelMultiplier: WHEEL_MULTIPLIER,
         smoothWheel: true,
+        virtualScroll: (data) => {
+          if (!data.event.type.includes("wheel")) return true;
+          let d = Math.max(-MAX_DELTA_PER_EVENT, Math.min(MAX_DELTA_PER_EVENT, data.deltaY));
+          const ahead = instance.targetScroll - instance.animatedScroll;
+          const room = window.innerHeight * MAX_AHEAD;
+          if (Math.sign(d) === Math.sign(ahead)) {
+            d = Math.sign(d) * Math.min(Math.abs(d), Math.max(0, room - Math.abs(ahead)));
+          }
+          if (d === 0) {
+            // Fully capped: swallow the tick so the browser doesn't scroll natively.
+            if (data.event.cancelable) data.event.preventDefault();
+            return false;
+          }
+          data.deltaY = d;
+          return true;
+        },
       });
+      lenis = instance;
       const loop = (time: number) => {
         lenis?.raf(time);
         raf = requestAnimationFrame(loop);
@@ -85,7 +111,7 @@ export default function ScrollProvider({ children }: { children: React.ReactNode
         }
       }
       if (best !== null && bestDist > 2 && bestDist < window.innerHeight * SNAP_RANGE) {
-        lenis.scrollTo(best, { duration: SNAP_DURATION });
+        lenis.scrollTo(best, { duration: SNAP_DURATION, easing: expoOut });
       }
     };
 
@@ -104,7 +130,7 @@ export default function ScrollProvider({ children }: { children: React.ReactNode
       const target = hash === "#" || hash === "#top" ? 0 : document.querySelector<HTMLElement>(hash);
       if (target === null) return;
       e.preventDefault();
-      lenis.scrollTo(target, { duration: ANCHOR_DURATION });
+      lenis.scrollTo(target, { duration: ANCHOR_DURATION, easing: expoOut });
     };
 
     if (lenis) lenis.on("scroll", onScroll);
