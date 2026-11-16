@@ -18,12 +18,40 @@ export function easeOut(t: number): number {
   return 1 - Math.pow(1 - t, 3);
 }
 
+/** Devices where Lenis smooth scrolling makes sense (mouse/trackpad). Touch keeps native scrolling. */
+export const FINE_POINTER_QUERY = "(hover: hover) and (pointer: fine)";
+
+let stableHeight = 0;
+let stableWidth = 0;
+
+/**
+ * Viewport height that ignores mobile browser toolbars sliding in and out.
+ *
+ * On iOS (Safari, Chrome, the Google app) the toolbars change
+ * `window.innerHeight` and fire `resize` mid-scroll. Anything sized or
+ * animated from it jumps. This measures the small viewport (`100svh`, the
+ * height with toolbars shown) and only re-measures when the width changes,
+ * i.e. on rotation, never on toolbar show/hide.
+ */
+export function stableViewportHeight(): number {
+  const width = window.innerWidth;
+  if (stableHeight && width === stableWidth) return stableHeight;
+  const probe = document.createElement("div");
+  const unit = CSS.supports("height", "100svh") ? "100svh" : "100vh";
+  probe.style.cssText = `position:fixed;top:0;left:0;width:0;height:${unit};visibility:hidden;pointer-events:none`;
+  document.body.appendChild(probe);
+  stableHeight = probe.offsetHeight || window.innerHeight;
+  probe.remove();
+  stableWidth = width;
+  return stableHeight;
+}
+
 /**
  * Progress (0..1) through a pinned section: 0 when its top reaches the
  * viewport top, 1 when its bottom reaches the viewport bottom.
  */
 export function progressOf(el: HTMLElement): number {
-  const total = el.offsetHeight - window.innerHeight;
+  const total = el.offsetHeight - stableViewportHeight();
   if (total <= 0) return 0;
   return clamp(-el.getBoundingClientRect().top / total);
 }

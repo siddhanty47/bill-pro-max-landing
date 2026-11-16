@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useScrollUpdate } from "../scroll/ScrollProvider";
-import { clamp, prefersReducedMotion } from "@/lib/motion";
+import { clamp, prefersReducedMotion, stableViewportHeight } from "@/lib/motion";
 import { SIGNUP_URL } from "@/lib/site";
 import ScaffoldDrawing from "./ScaffoldDrawing";
 import styles from "./Hero.module.css";
@@ -16,7 +16,7 @@ export default function Hero() {
     if (!art || prefersReducedMotion()) return;
     const y = window.scrollY;
     art.style.transform = `translate3d(0, ${y * 0.25}px, 0) scale(${1 + y * 0.0003})`;
-    art.style.opacity = String(1 - clamp(y / (window.innerHeight * 0.9)));
+    art.style.opacity = String(1 - clamp(y / (stableViewportHeight() * 0.9)));
   });
 
   return (

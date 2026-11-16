@@ -104,6 +104,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  /* clip (unlike hidden) doesn't turn body into a scroll container, which
+     keeps iOS native scrolling and sticky sections stable */
+  overflow-x: clip;
 }
 
 ::selection {

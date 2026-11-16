@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useScrollUpdate } from "../scroll/ScrollProvider";
 import BrandMark from "../shared/BrandMark";
 import { SIGNUP_URL } from "@/lib/site";
+import { stableViewportHeight } from "@/lib/motion";
 import styles from "./Navbar.module.css";
 
 export default function Navbar() {
@@ -13,7 +14,7 @@ export default function Navbar() {
   useScrollUpdate(() => {
     const y = window.scrollY;
     navRef.current?.classList.toggle(styles.scrolled, y > 40);
-    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const max = document.documentElement.scrollHeight - stableViewportHeight();
     if (barRef.current) {
       barRef.current.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
     }
