@@ -9,7 +9,12 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { isMobile, prefersReducedMotion } from "@/lib/motion";
+import {
+  FINE_POINTER_QUERY,
+  isMobile,
+  prefersReducedMotion,
+  stableViewportHeight,
+} from "@/lib/motion";
 
 type Updater = () => void;
 
@@ -36,7 +41,7 @@ const expoOut = (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
 
 /** Section edges worth settling on: tops of [data-snap] and [data-snap-pin], ends of pinned sections, page bottom. */
 function snapPoints(): number[] {
-  const vh = window.innerHeight;
+  const vh = stableViewportHeight();
   const points: number[] = [];
   document
     .querySelectorAll<HTMLElement>("[data-snap], [data-snap-pin]")
@@ -64,10 +69,22 @@ export default function ScrollProvider({ children }: { children: React.ReactNode
   useEffect(() => {
     const runAll = () => updaters.current.forEach((fn) => fn());
     const reduced = prefersReducedMotion();
+    const root = document.documentElement;
 
+    // Publish the toolbar-independent viewport height for CSS (`var(--svh)`).
+    // Mobile toolbars only change the height, so re-measure on width changes only.
+    let lastWidth = 0;
+    const syncViewport = () => {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      root.style.setProperty("--svh", `${stableViewportHeight() / 100}px`);
+    };
+    syncViewport();
+
+    // Smooth scrolling only for mouse/trackpad; touch keeps the browser's native momentum.
     let lenis: Lenis | null = null;
     let raf = 0;
-    if (!reduced) {
+    if (!reduced && window.matchMedia(FINE_POINTER_QUERY).matches) {
       const instance = new Lenis({
         lerp: WHEEL_LERP,
         wheelMultiplier: WHEEL_MULTIPLIER,
@@ -76,7 +93,7 @@ export default function ScrollProvider({ children }: { children: React.ReactNode
           if (!data.event.type.includes("wheel")) return true;
           let d = Math.max(-MAX_DELTA_PER_EVENT, Math.min(MAX_DELTA_PER_EVENT, data.deltaY));
           const ahead = instance.targetScroll - instance.animatedScroll;
-          const room = window.innerHeight * MAX_AHEAD;
+          const room = stableViewportHeight() * MAX_AHEAD;
           if (Math.sign(d) === Math.sign(ahead)) {
             d = Math.sign(d) * Math.min(Math.abs(d), Math.max(0, room - Math.abs(ahead)));
           }
@@ -110,7 +127,7 @@ export default function ScrollProvider({ children }: { children: React.ReactNode
           best = p;
         }
       }
-      if (best !== null && bestDist > 2 && bestDist < window.innerHeight * SNAP_RANGE) {
+      if (best !== null && bestDist > 2 && bestDist < stableViewportHeight() * SNAP_RANGE) {
         lenis.scrollTo(best, { duration: SNAP_DURATION, easing: expoOut });
       }
     };
@@ -135,7 +152,11 @@ export default function ScrollProvider({ children }: { children: React.ReactNode
 
     if (lenis) lenis.on("scroll", onScroll);
     else window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", runAll);
+    const onResize = () => {
+      syncViewport();
+      runAll();
+    };
+    window.addEventListener("resize", onResize);
     document.addEventListener("click", onClick);
     runAll();
 
@@ -144,7 +165,7 @@ export default function ScrollProvider({ children }: { children: React.ReactNode
       clearTimeout(idle);
       lenis?.destroy();
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", runAll);
+      window.removeEventListener("resize", onResize);
       document.removeEventListener("click", onClick);
     };
   }, []);

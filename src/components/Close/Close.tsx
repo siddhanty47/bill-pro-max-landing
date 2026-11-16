@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useScrollUpdate } from "../scroll/ScrollProvider";
-import { clamp, prefersReducedMotion } from "@/lib/motion";
+import { clamp, prefersReducedMotion, stableViewportHeight } from "@/lib/motion";
 import { SIGNUP_URL } from "@/lib/site";
 import styles from "./Close.module.css";
 
@@ -21,7 +21,7 @@ export default function Close() {
     if (!section || !tower) return;
     const p = prefersReducedMotion()
       ? 1
-      : clamp(1 - section.getBoundingClientRect().top / window.innerHeight);
+      : clamp(1 - section.getBoundingClientRect().top / stableViewportHeight());
     tower.querySelectorAll("g").forEach((g, i) => g.classList.toggle(styles.built, p > i / 12));
   });
 

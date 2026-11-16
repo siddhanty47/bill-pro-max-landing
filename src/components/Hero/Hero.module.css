@@ -1,6 +1,7 @@
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: calc(var(--svh, 1svh) * 100);
   padding: 120px var(--gutter) 0;
   overflow: hidden;
 }
@@ -100,6 +101,7 @@
 .art {
   margin-top: 40px;
   height: min(46vh, 440px);
+  height: min(calc(var(--svh, 1svh) * 46), 440px);
   display: flex;
   justify-content: center;
   will-change: transform, opacity;
@@ -236,5 +238,6 @@
 
   .art {
     height: 34vh;
+    height: calc(var(--svh, 1svh) * 34);
   }
 }

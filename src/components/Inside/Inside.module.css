@@ -1,12 +1,14 @@
 .inside {
   position: relative;
   height: 520vh;
+  height: calc(var(--svh, 1svh) * 520);
 }
 
 .sticky {
   position: sticky;
   top: 0;
   height: 100vh;
+  height: calc(var(--svh, 1svh) * 100);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -76,6 +78,7 @@
 .panel {
   flex: 0 0 min(82vw, 1040px);
   height: min(64vh, 560px);
+  height: min(calc(var(--svh, 1svh) * 64), 560px);
   display: grid;
   grid-template-columns: 0.8fr 1.2fr;
   border: 1px solid var(--border-default);
